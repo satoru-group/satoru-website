@@ -2,62 +2,202 @@ import './App.css'
 import { useEffect } from 'react'
 
 function App() {
-  // Animate counters when they come into view
+  // Enhanced counter animation with smooth counting from 0 to target
   useEffect(() => {
+    let hasAnimated = false // Prevent multiple animations
+    
     const animateCounters = () => {
+      if (hasAnimated) return
+      hasAnimated = true
+      
       const counters = document.querySelectorAll('.stat-number')
       
-      counters.forEach(counter => {
+      counters.forEach((counter, index) => {
         const target = parseInt(counter.getAttribute('data-target') || '0')
-        const current = parseInt(counter.textContent || '0')
-        const increment = target / 100
+        const duration = 2000 // 2 seconds animation
+        const startTime = Date.now()
         
-        if (current < target) {
-          counter.textContent = Math.ceil(current + increment).toString()
-          setTimeout(() => animateCounters(), 20)
-        } else {
-          counter.textContent = target.toString()
-        }
-      })
-    }
-
-    // Intersection Observer to trigger animations when elements come into view
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounters()
-          observer.unobserve(entry.target)
-        }
-      })
-    })
-
-    const statsSection = document.querySelector('.stats')
-    if (statsSection) {
-      observer.observe(statsSection)
-    }
-
-    return () => observer.disconnect()
-  }, [])
-
-  // Smooth scroll navigation
-  useEffect(() => {
-    const handleNavClick = (e: Event) => {
-      const target = e.target as HTMLAnchorElement
-      if (target.classList.contains('nav-link')) {
-        e.preventDefault()
-        const href = target.getAttribute('href')
-        if (href && href.startsWith('#')) {
-          const element = document.querySelector(href)
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' })
+        const updateCounter = () => {
+          const elapsed = Date.now() - startTime
+          const progress = Math.min(elapsed / duration, 1)
+          
+          // Use easing function for smooth animation
+          const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+          const current = Math.floor(target * easeOutQuart)
+          
+          counter.textContent = current.toString()
+          
+          // Add pulse effect during counting
+          if (progress < 1) {
+            counter.style.animation = 'counterPulse 0.3s ease-in-out'
+            requestAnimationFrame(updateCounter)
+          } else {
+            counter.textContent = target.toString()
+            counter.style.animation = 'none'
           }
         }
+        
+        // Start animation with slight delay for staggered effect
+        setTimeout(() => {
+          updateCounter()
+        }, index * 200)
+      })
+    }
+
+    // Check if stats section is visible based on scroll position
+    const checkStatsVisibility = () => {
+      const scrollY = window.scrollY
+      const windowHeight = window.innerHeight
+      
+      // Check if we're in the stats section (60vh to 120vh)
+      if (scrollY >= windowHeight * 0.6 && scrollY < windowHeight * 1.2) {
+        // Reset counters to 0 first
+        const counters = document.querySelectorAll('.stat-number')
+        counters.forEach(counter => {
+          counter.textContent = '0'
+        })
+        
+        // Start animation after a brief delay
+        setTimeout(() => {
+          animateCounters()
+        }, 300)
       }
     }
 
-    document.addEventListener('click', handleNavClick)
-    return () => document.removeEventListener('click', handleNavClick)
+    // Listen for scroll events to trigger animation
+    window.addEventListener('scroll', checkStatsVisibility, { passive: true })
+    
+    // Also check on initial load
+    checkStatsVisibility()
+
+    return () => {
+      window.removeEventListener('scroll', checkStatsVisibility)
+    }
   }, [])
+
+  // Stacked cards animation for sections 1&2, different transition for others
+  useEffect(() => {
+    let currentSection = 0
+
+    const handleScroll = () => {
+      
+      const scrollY = window.scrollY
+      const windowHeight = window.innerHeight
+      
+      // Calculate which section we should be in based on scroll position
+      // Match the actual spacer heights: 60vh for Hero/Stats, 80vh for others
+      let targetSection = 0
+      
+      if (scrollY < windowHeight * 0.6) {
+        targetSection = 0 // Hero (0-60vh)
+      } else if (scrollY < windowHeight * 1.2) {
+        targetSection = 1 // Stats (60vh-120vh)
+      } else if (scrollY < windowHeight * 2.0) {
+        targetSection = 2 // About (120vh-200vh)
+      } else if (scrollY < windowHeight * 2.8) {
+        targetSection = 3 // Services (200vh-280vh)
+      } else if (scrollY < windowHeight * 3.6) {
+        targetSection = 4 // Values (280vh-360vh)
+      } else if (scrollY < windowHeight * 4.4) {
+        targetSection = 5 // Contact (360vh-440vh)
+      } else {
+        targetSection = 6 // Footer (440vh+)
+      }
+      
+      // Always update section display to allow scrolling back
+      if (targetSection !== currentSection) {
+        currentSection = targetSection
+      }
+      updateSectionDisplay(currentSection, scrollY, windowHeight)
+    }
+
+    const updateSectionDisplay = (sectionIndex: number, scrollY: number, windowHeight: number) => {
+      // Handle Hero and Stats as stacked cards
+      const heroElement = document.querySelector('.hero') as HTMLElement
+      const statsElement = document.querySelector('.stats') as HTMLElement
+      
+      if (heroElement && statsElement) {
+        if (sectionIndex <= 1) {
+          // Stacked card animation for sections 1&2
+          // Calculate progress based on scroll position within the Hero/Stats range
+          let scrollProgress = 0
+          if (scrollY >= windowHeight * 0.6) {
+            // In stats section - calculate progress from 60vh to 120vh
+            scrollProgress = Math.min((scrollY - windowHeight * 0.6) / (windowHeight * 0.6), 1)
+          }
+          
+          const heroTranslateY = -scrollProgress * 100
+          const statsTranslateY = -100 + (scrollProgress * 100)
+          
+          heroElement.style.transform = `translateY(${heroTranslateY}vh)`
+          heroElement.style.opacity = '1'
+          
+          statsElement.style.transform = `translateY(${statsTranslateY}vh)`
+          statsElement.style.opacity = '1'
+        } else {
+          // Hide Hero and Stats when in other sections
+          heroElement.style.transform = 'translateY(-100vh)'
+          heroElement.style.opacity = '0'
+          statsElement.style.transform = 'translateY(-100vh)'
+          statsElement.style.opacity = '0'
+        }
+      }
+      
+      // Handle other sections (3+) with 1 scroll transition
+      const otherSections = ['.about', '.services', '.values', '.contact', '.footer']
+      otherSections.forEach((section, index) => {
+        const element = document.querySelector(section) as HTMLElement
+        if (element) {
+          const otherSectionIndex = index + 2 // About=2, Services=3, etc.
+          
+          if (sectionIndex === otherSectionIndex) {
+            // Current section - slide in from right
+            element.style.transform = 'translateX(0)'
+            element.style.opacity = '1'
+          } else if (sectionIndex > otherSectionIndex) {
+            // Previous sections - slide out to left
+            element.style.transform = 'translateX(-100vw)'
+            element.style.opacity = '0'
+          } else {
+            // Future sections - hide to the right
+            element.style.transform = 'translateX(100vw)'
+            element.style.opacity = '0'
+          }
+        }
+      })
+    }
+
+    // Simple scroll handler
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll() // Initial call
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  // Smooth scroll navigation - always return to top on refresh or home click
+  useEffect(() => {
+    // Scroll to top on page load/refresh
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    
+    // Handle navigation clicks
+    const handleNavClick = (e: Event) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'A' && (target.getAttribute('href') === '#home' || target.textContent?.includes('SATORU'))) {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }
+    
+    // Add click listeners to navigation links and logo
+    document.addEventListener('click', handleNavClick)
+    
+    return () => {
+      document.removeEventListener('click', handleNavClick)
+    }
+  }, [])
+
+
   return (
     <div className="app">
       {/* Navigation */}
@@ -163,6 +303,9 @@ function App() {
         </div>
       </section>
 
+      {/* Spacer */}
+      <div style={{ height: '80vh' }}></div>
+
       {/* About Section */}
       <section id="about" className="about">
         <div className="about-background">
@@ -211,6 +354,9 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Spacer */}
+      <div style={{ height: '80vh' }}></div>
 
       {/* Services Section */}
       <section id="services" className="services">
@@ -299,6 +445,9 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Spacer */}
+      <div style={{ height: '80vh' }}></div>
 
       {/* Values Section */}
       <section id="values" className="values">
@@ -410,6 +559,9 @@ function App() {
         </div>
       </section>
 
+      {/* Spacer */}
+      <div style={{ height: '80vh' }}></div>
+
       {/* Contact Section */}
       <section id="contact" className="contact">
         <div className="contact-background">
@@ -439,6 +591,9 @@ function App() {
         </div>
       </section>
 
+      {/* Spacer */}
+      <div style={{ height: '80vh' }}></div>
+
       {/* Footer */}
       <footer className="footer">
         <div className="footer-container">
@@ -456,6 +611,9 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Final Spacer */}
+      <div style={{ height: '80vh' }}></div>
     </div>
   )
 }
