@@ -5,10 +5,12 @@ function App() {
   // Enhanced counter animation with smooth counting from 0 to target
   useEffect(() => {
     let hasAnimated = false // Prevent multiple animations
+    let isAnimating = false // Prevent overlapping animations
     
     const animateCounters = () => {
-      if (hasAnimated) return
+      if (hasAnimated || isAnimating) return
       hasAnimated = true
+      isAnimating = true
       
       const counters = document.querySelectorAll('.stat-number')
       
@@ -35,6 +37,7 @@ function App() {
           } else {
             counterElement.textContent = target.toString()
             counterElement.style.animation = 'none'
+            isAnimating = false
           }
         }
         
@@ -50,8 +53,8 @@ function App() {
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
       
-      // Check if we're in the stats section (60vh to 120vh)
-      if (scrollY >= windowHeight * 0.6 && scrollY < windowHeight * 1.2) {
+      // Check if we're in the stats section (60vh to 120vh) and haven't animated yet
+      if (scrollY >= windowHeight * 0.6 && scrollY < windowHeight * 1.2 && !hasAnimated) {
         // Reset counters to 0 first
         const counters = document.querySelectorAll('.stat-number')
         counters.forEach(counter => {
@@ -306,7 +309,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '80vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
 
       {/* About Section */}
       <section id="about" className="about">
