@@ -162,17 +162,17 @@ function App() {
             // Current section - slide in from right with smooth transition
             element.style.transform = 'translateX(0)'
             element.style.opacity = '1'
-            element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out'
+            element.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
           } else if (sectionIndex > otherSectionIndex) {
             // Previous sections - slide out to left
             element.style.transform = 'translateX(-100vw)'
             element.style.opacity = '0'
-            element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out'
+            element.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
           } else {
             // Future sections - hide to the right
             element.style.transform = 'translateX(100vw)'
             element.style.opacity = '0'
-            element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out'
+            element.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
           }
         }
       })
