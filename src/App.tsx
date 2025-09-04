@@ -104,8 +104,10 @@ function App() {
         targetSection = 4 // Values (240vh-300vh) - 1.5 scrolls
       } else if (scrollY < windowHeight * 3.6) {
         targetSection = 5 // Contact (300vh-360vh) - 1.5 scrolls
+      } else if (scrollY < windowHeight * 4.2) {
+        targetSection = 6 // Footer (360vh-420vh) - 1.5 scrolls
       } else {
-        targetSection = 6 // Footer (360vh+) - 1.5 scrolls
+        targetSection = 6 // Footer (420vh+) - Stay in footer
       }
       
       // Update current section
@@ -622,6 +624,9 @@ function App() {
       </footer>
 
       {/* Final Spacer */}
+      <div style={{ height: '60vh' }}></div>
+      
+      {/* Additional Spacer for Footer Section */}
       <div style={{ height: '60vh' }}></div>
     </div>
   )
