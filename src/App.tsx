@@ -53,8 +53,8 @@ function App() {
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
       
-      // Check if we're in the stats section (60vh to 120vh) and haven't animated yet
-      if (scrollY >= windowHeight * 0.6 && scrollY < windowHeight * 1.2 && !hasAnimated) {
+      // Check if we're in the stats section (30vh to 90vh) and haven't animated yet
+      if (scrollY >= windowHeight * 0.3 && scrollY < windowHeight * 0.9 && !hasAnimated) {
         // Reset counters to 0 first
         const counters = document.querySelectorAll('.stat-number')
         counters.forEach(counter => {
@@ -83,37 +83,53 @@ function App() {
   // Stacked cards animation for sections 1&2, different transition for others
   useEffect(() => {
     let currentSection = 0
+    let isScrolling = false
+    let scrollTimeout: NodeJS.Timeout
 
     const handleScroll = () => {
+      if (isScrolling) return // Prevent rapid section changes
       
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
       
       // Calculate which section we should be in based on scroll position
-      // Match the actual spacer heights: 60vh for Hero/Stats, 80vh for others
+      // Use more precise thresholds to prevent skipping
       let targetSection = 0
       
-      if (scrollY < windowHeight * 0.6) {
-        targetSection = 0 // Hero (0-60vh)
-      } else if (scrollY < windowHeight * 1.2) {
-        targetSection = 1 // Stats (60vh-120vh)
-      } else if (scrollY < windowHeight * 2.0) {
-        targetSection = 2 // About (120vh-200vh)
-      } else if (scrollY < windowHeight * 2.8) {
-        targetSection = 3 // Services (200vh-280vh)
-      } else if (scrollY < windowHeight * 3.6) {
-        targetSection = 4 // Values (280vh-360vh)
-      } else if (scrollY < windowHeight * 4.4) {
-        targetSection = 5 // Contact (360vh-440vh)
+      if (scrollY < windowHeight * 0.3) {
+        targetSection = 0 // Hero (0-30vh)
+      } else if (scrollY < windowHeight * 0.9) {
+        targetSection = 1 // Stats (30vh-90vh)
+      } else if (scrollY < windowHeight * 1.6) {
+        targetSection = 2 // About (90vh-160vh)
+      } else if (scrollY < windowHeight * 2.4) {
+        targetSection = 3 // Services (160vh-240vh)
+      } else if (scrollY < windowHeight * 3.2) {
+        targetSection = 4 // Values (240vh-320vh)
+      } else if (scrollY < windowHeight * 4.0) {
+        targetSection = 5 // Contact (320vh-400vh)
       } else {
-        targetSection = 6 // Footer (440vh+)
+        targetSection = 6 // Footer (400vh+)
       }
       
-      // Always update section display to allow scrolling back
+      // Only change section if we're moving to a different section
       if (targetSection !== currentSection) {
         currentSection = targetSection
+        updateSectionDisplay(currentSection, scrollY, windowHeight)
       }
-      updateSectionDisplay(currentSection, scrollY, windowHeight)
+    }
+
+    // Throttled scroll handler to prevent skipping
+    const throttledScroll = () => {
+      if (isScrolling) return
+      
+      isScrolling = true
+      handleScroll()
+      
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false
+      }, 150) // 150ms throttle
     }
 
     const updateSectionDisplay = (sectionIndex: number, scrollY: number, windowHeight: number) => {
@@ -126,9 +142,9 @@ function App() {
           // Stacked card animation for sections 1&2
           // Calculate progress based on scroll position within the Hero/Stats range
           let scrollProgress = 0
-          if (scrollY >= windowHeight * 0.6) {
-            // In stats section - calculate progress from 60vh to 120vh
-            scrollProgress = Math.min((scrollY - windowHeight * 0.6) / (windowHeight * 0.6), 1)
+          if (scrollY >= windowHeight * 0.3) {
+            // In stats section - calculate progress from 30vh to 90vh
+            scrollProgress = Math.min((scrollY - windowHeight * 0.3) / (windowHeight * 0.6), 1)
           }
           
           const heroTranslateY = -scrollProgress * 100
@@ -172,11 +188,12 @@ function App() {
       })
     }
 
-    // Simple scroll handler
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    // Throttled scroll handler
+    window.addEventListener('scroll', throttledScroll, { passive: true })
     handleScroll() // Initial call
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', throttledScroll)
+      clearTimeout(scrollTimeout)
     }
   }, [])
 
@@ -361,7 +378,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '80vh' }}></div>
+      <div style={{ height: '70vh' }}></div>
 
       {/* Services Section */}
       <section id="services" className="services">
