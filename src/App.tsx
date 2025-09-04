@@ -53,8 +53,8 @@ function App() {
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
       
-      // Check if we're in the stats section (100vh to 200vh) and haven't animated yet
-      if (scrollY >= windowHeight * 1.0 && scrollY < windowHeight * 2.0 && !hasAnimated) {
+      // Check if we're in the stats section (60vh to 120vh) and haven't animated yet
+      if (scrollY >= windowHeight * 0.6 && scrollY < windowHeight * 1.2 && !hasAnimated) {
         // Reset counters to 0 first
         const counters = document.querySelectorAll('.stat-number')
         counters.forEach(counter => {
@@ -89,23 +89,23 @@ function App() {
       const windowHeight = window.innerHeight
       
       // Calculate which section we should be in based on scroll position
-      // Each section gets full 100vh display before moving to next
+      // 1 to 1.5 scrolls for each section transition - more sensitive and consistent
       let targetSection = 0
       
-      if (scrollY < windowHeight * 1.0) {
-        targetSection = 0 // Hero (0-100vh) - Full screen
-      } else if (scrollY < windowHeight * 2.0) {
-        targetSection = 1 // Stats (100vh-200vh) - Full screen
+      if (scrollY < windowHeight * 0.6) {
+        targetSection = 0 // Hero (0-60vh) - 1.5 scrolls
+      } else if (scrollY < windowHeight * 1.2) {
+        targetSection = 1 // Stats (60vh-120vh) - 1.5 scrolls
+      } else if (scrollY < windowHeight * 1.8) {
+        targetSection = 2 // About (120vh-180vh) - 1.5 scrolls
+      } else if (scrollY < windowHeight * 2.4) {
+        targetSection = 3 // Services (180vh-240vh) - 1.5 scrolls
       } else if (scrollY < windowHeight * 3.0) {
-        targetSection = 2 // About (200vh-300vh) - Full screen
-      } else if (scrollY < windowHeight * 4.0) {
-        targetSection = 3 // Services (300vh-400vh) - Full screen
-      } else if (scrollY < windowHeight * 5.0) {
-        targetSection = 4 // Values (400vh-500vh) - Full screen
-      } else if (scrollY < windowHeight * 6.0) {
-        targetSection = 5 // Contact (500vh-600vh) - Full screen
+        targetSection = 4 // Values (240vh-300vh) - 1.5 scrolls
+      } else if (scrollY < windowHeight * 3.6) {
+        targetSection = 5 // Contact (300vh-360vh) - 1.5 scrolls
       } else {
-        targetSection = 6 // Footer (600vh+) - Full screen
+        targetSection = 6 // Footer (360vh+) - 1.5 scrolls
       }
       
       // Update current section
@@ -126,9 +126,9 @@ function App() {
           let scrollProgress = 0
           
           // Calculate progress based on scroll position within the Hero/Stats range
-          if (scrollY >= windowHeight * 1.0) {
-            // In stats section - calculate progress from 100vh to 200vh
-            scrollProgress = Math.min((scrollY - windowHeight * 1.0) / windowHeight, 1)
+          if (scrollY >= windowHeight * 0.6) {
+            // In stats section - calculate progress from 60vh to 120vh (1.5 scrolls)
+            scrollProgress = Math.min((scrollY - windowHeight * 0.6) / (windowHeight * 0.6), 1)
           }
           
           // Smooth real-time animation that follows scroll movement
@@ -313,7 +313,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '100vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
 
       {/* About Section */}
       <section id="about" className="about">
@@ -365,7 +365,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '100vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
 
       {/* Services Section */}
       <section id="services" className="services">
@@ -456,7 +456,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '100vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
 
       {/* Values Section */}
       <section id="values" className="values">
@@ -569,7 +569,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '100vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
 
       {/* Contact Section */}
       <section id="contact" className="contact">
@@ -601,7 +601,7 @@ function App() {
       </section>
 
       {/* Spacer */}
-      <div style={{ height: '100vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
 
       {/* Footer */}
       <footer className="footer">
@@ -622,7 +622,7 @@ function App() {
       </footer>
 
       {/* Final Spacer */}
-      <div style={{ height: '100vh' }}></div>
+      <div style={{ height: '60vh' }}></div>
     </div>
   )
 }
