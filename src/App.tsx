@@ -83,15 +83,12 @@ function App() {
   // Stacked cards animation for sections 1&2, different transition for others
   useEffect(() => {
     let currentSection = 0
-    let isScrolling = false
-    let scrollTimeout: NodeJS.Timeout
 
     const handleScroll = () => {
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
       
       // Calculate which section we should be in based on scroll position
-      // Use balanced thresholds for smooth scrolling
       let targetSection = 0
       
       if (scrollY < windowHeight * 0.5) {
@@ -110,24 +107,11 @@ function App() {
         targetSection = 6 // Footer (410vh+)
       }
       
-      // Only change section if we're moving to a different section
-      if (targetSection !== currentSection) {
-        currentSection = targetSection
-        updateSectionDisplay(currentSection, scrollY, windowHeight)
-      }
-    }
-
-    // Light throttling to prevent excessive calls
-    const throttledScroll = () => {
-      if (isScrolling) return
+      // Update current section
+      currentSection = targetSection
       
-      isScrolling = true
-      handleScroll()
-      
-      clearTimeout(scrollTimeout)
-      scrollTimeout = setTimeout(() => {
-        isScrolling = false
-      }, 50) // Reduced to 50ms for smoother scrolling
+      // Always update display to follow scroll movement in real-time
+      updateSectionDisplay(currentSection, scrollY, windowHeight)
     }
 
     const updateSectionDisplay = (sectionIndex: number, scrollY: number, windowHeight: number) => {
@@ -137,14 +121,16 @@ function App() {
       
       if (heroElement && statsElement) {
         if (sectionIndex <= 1) {
-          // Stacked card animation for sections 1&2
-          // Calculate progress based on scroll position within the Hero/Stats range
+          // Stacked card animation for sections 1&2 - follows scroll in real-time
           let scrollProgress = 0
+          
+          // Calculate progress based on scroll position within the Hero/Stats range
           if (scrollY >= windowHeight * 0.5) {
             // In stats section - calculate progress from 50vh to 100vh
             scrollProgress = Math.min((scrollY - windowHeight * 0.5) / (windowHeight * 0.5), 1)
           }
           
+          // Smooth real-time animation that follows scroll movement
           const heroTranslateY = -scrollProgress * 100
           const statsTranslateY = -100 + (scrollProgress * 100)
           
@@ -162,7 +148,7 @@ function App() {
         }
       }
       
-      // Handle other sections (3+) with 1 scroll transition
+      // Handle other sections (3+) with smooth transitions that follow scroll
       const otherSections = ['.about', '.services', '.values', '.contact', '.footer']
       otherSections.forEach((section, index) => {
         const element = document.querySelector(section) as HTMLElement
@@ -170,28 +156,30 @@ function App() {
           const otherSectionIndex = index + 2 // About=2, Services=3, etc.
           
           if (sectionIndex === otherSectionIndex) {
-            // Current section - slide in from right
+            // Current section - slide in from right with smooth transition
             element.style.transform = 'translateX(0)'
             element.style.opacity = '1'
+            element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out'
           } else if (sectionIndex > otherSectionIndex) {
             // Previous sections - slide out to left
             element.style.transform = 'translateX(-100vw)'
             element.style.opacity = '0'
+            element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out'
           } else {
             // Future sections - hide to the right
             element.style.transform = 'translateX(100vw)'
             element.style.opacity = '0'
+            element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out'
           }
         }
       })
     }
 
-    // Throttled scroll handler
-    window.addEventListener('scroll', throttledScroll, { passive: true })
+    // Direct scroll handler for real-time responsiveness
+    window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll() // Initial call
     return () => {
-      window.removeEventListener('scroll', throttledScroll)
-      clearTimeout(scrollTimeout)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
