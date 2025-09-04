@@ -13,7 +13,8 @@ function App() {
       const counters = document.querySelectorAll('.stat-number')
       
       counters.forEach((counter, index) => {
-        const target = parseInt(counter.getAttribute('data-target') || '0')
+        const counterElement = counter as HTMLElement
+        const target = parseInt(counterElement.getAttribute('data-target') || '0')
         const duration = 2000 // 2 seconds animation
         const startTime = Date.now()
         
@@ -25,15 +26,15 @@ function App() {
           const easeOutQuart = 1 - Math.pow(1 - progress, 4)
           const current = Math.floor(target * easeOutQuart)
           
-          counter.textContent = current.toString()
+          counterElement.textContent = current.toString()
           
           // Add pulse effect during counting
           if (progress < 1) {
-            counter.style.animation = 'counterPulse 0.3s ease-in-out'
+            counterElement.style.animation = 'counterPulse 0.3s ease-in-out'
             requestAnimationFrame(updateCounter)
           } else {
-            counter.textContent = target.toString()
-            counter.style.animation = 'none'
+            counterElement.textContent = target.toString()
+            counterElement.style.animation = 'none'
           }
         }
         
@@ -54,7 +55,8 @@ function App() {
         // Reset counters to 0 first
         const counters = document.querySelectorAll('.stat-number')
         counters.forEach(counter => {
-          counter.textContent = '0'
+          const counterElement = counter as HTMLElement
+          counterElement.textContent = '0'
         })
         
         // Start animation after a brief delay
