@@ -1,0 +1,478 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* AI Dark Theme */
+    --background: 220 27% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 23% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 220 23% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 195 100% 50%; /* AI Cyan */
+    --primary-foreground: 220 27% 4%;
+
+    --secondary: 217 19% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 19% 8%;
+    --muted-foreground: 215 25% 65%;
+
+    --accent: 270 100% 60%; /* AI Purple */
+    --accent-foreground: 220 27% 4%;
+
+    --destructive: 0 73% 58%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 19% 12%;
+    --input: 217 19% 12%;
+    --ring: 195 100% 50%;
+
+    /* AI Success & Warning */
+    --success: 158 48% 43%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 69% 51%;
+    --warning-foreground: 0 0% 100%;
+
+    /* AI-themed gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(195 100% 50%), hsl(220 100% 60%), hsl(270 100% 60%));
+    --gradient-subtle: linear-gradient(180deg, hsl(220 27% 4%), hsl(220 23% 6%));
+    --gradient-glow: linear-gradient(135deg, hsl(195 100% 50% / 0.1), hsl(270 100% 60% / 0.1));
+    --gradient-ai: linear-gradient(135deg, hsl(195 100% 50% / 0.8), hsl(270 100% 60% / 0.8));
+    
+    /* AI-themed shadows and glows */
+    --shadow-elegant: 0 10px 40px -12px hsl(195 100% 50% / 0.4);
+    --shadow-soft: 0 4px 20px -4px hsl(195 100% 50% / 0.2);
+    --glow-cyan: 0 0 20px hsl(195 100% 50% / 0.5);
+    --glow-purple: 0 0 20px hsl(270 100% 60% / 0.5);
+    --glow-ai: 0 0 40px hsl(195 100% 50% / 0.3), 0 0 80px hsl(270 100% 60% / 0.2);
+    
+    /* Smooth transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-glow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .light {
+    /* Professional AI Light Mode */
+    --background: 35 25% 97%; /* Warm Pearl */
+    --foreground: 210 25% 10%; /* Rich Charcoal */
+
+    --card: 0 0% 100%; /* Pure white cards */
+    --card-foreground: 210 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 25% 10%;
+
+    --primary: 215 85% 55%; /* Professional Blue */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 25 60% 92%; /* Soft Cream */
+    --secondary-foreground: 210 25% 10%;
+
+    --muted: 25 40% 94%;
+    --muted-foreground: 210 15% 45%;
+
+    --accent: 280 75% 58%; /* Rich Purple */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 355 75% 58%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 35 20% 85%;
+    --input: 35 20% 88%;
+    --ring: 215 85% 55%;
+
+    /* Professional Success & Warning */
+    --success: 155 65% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 85% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Professional gradients for light mode */
+    --gradient-primary: linear-gradient(135deg, hsl(215 85% 55%), hsl(185 80% 50%), hsl(280 75% 58%));
+    --gradient-subtle: linear-gradient(180deg, hsl(35 25% 97%), hsl(25 35% 95%));
+    --gradient-glow: linear-gradient(135deg, hsl(215 85% 55% / 0.08), hsl(280 75% 58% / 0.08));
+    --gradient-ai: linear-gradient(135deg, hsl(215 85% 55% / 0.15), hsl(280 75% 58% / 0.15));
+    
+    /* Professional shadows and glows */
+    --shadow-elegant: 0 10px 40px -12px hsl(215 85% 55% / 0.2);
+    --shadow-soft: 0 4px 20px -4px hsl(215 85% 55% / 0.12);
+    --glow-cyan: 0 0 20px hsl(185 80% 50% / 0.25);
+    --glow-purple: 0 0 20px hsl(270 100% 55% / 0.3);
+    --glow-ai: 0 0 40px hsl(195 100% 45% / 0.2), 0 0 80px hsl(270 100% 55% / 0.15);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* AI Dark Mode */
+    --background: 220 27% 4%; /* Deep AI Dark */
+    --foreground: 210 40% 98%; /* Bright white */
+
+    --card: 220 23% 6%; /* Slightly lighter dark */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 220 23% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 195 100% 60%; /* Brighter AI Cyan */
+    --primary-foreground: 220 27% 4%;
+
+    --secondary: 217 19% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 19% 8%;
+    --muted-foreground: 215 25% 65%;
+
+    --accent: 270 100% 70%; /* Brighter AI Purple */
+    --accent-foreground: 220 27% 4%;
+
+    --destructive: 0 73% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 19% 12%;
+    --input: 217 19% 12%;
+    --ring: 195 100% 60%;
+
+    /* AI Success & Warning for dark mode */
+    --success: 158 48% 50%;
+    --success-foreground: 220 27% 4%;
+    --warning: 45 69% 55%;
+    --warning-foreground: 220 27% 4%;
+
+    /* AI-themed gradients for dark mode */
+    --gradient-primary: linear-gradient(135deg, hsl(195 100% 60%), hsl(220 100% 65%), hsl(270 100% 70%));
+    --gradient-subtle: linear-gradient(180deg, hsl(220 27% 4%), hsl(220 23% 6%));
+    --gradient-glow: linear-gradient(135deg, hsl(195 100% 60% / 0.15), hsl(270 100% 70% / 0.15));
+    --gradient-ai: linear-gradient(135deg, hsl(195 100% 60% / 0.8), hsl(270 100% 70% / 0.8));
+    
+    /* AI-themed shadows and glows for dark mode */
+    --shadow-elegant: 0 10px 40px -12px hsl(195 100% 60% / 0.4);
+    --shadow-soft: 0 4px 20px -4px hsl(195 100% 60% / 0.3);
+    --glow-cyan: 0 0 20px hsl(195 100% 60% / 0.6);
+    --glow-purple: 0 0 20px hsl(270 100% 70% / 0.6);
+    --glow-ai: 0 0 40px hsl(195 100% 60% / 0.4), 0 0 80px hsl(270 100% 70% / 0.3);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    scroll-behavior: smooth;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* Enhanced smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* AI-themed utility classes */
+  .glow {
+    filter: drop-shadow(0 0 10px hsl(var(--primary)));
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  /* AI Background Effects */
+  .ai-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-glow);
+    opacity: 0.1;
+    animation: ai-pulse 4s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  .ai-bg::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.05) 0%, transparent 70%);
+    animation: ai-rotate 20s linear infinite;
+    z-index: -1;
+  }
+
+  /* Neural Network Background Pattern */
+  .neural-bg {
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, hsl(var(--primary) / 0.2), transparent),
+      radial-gradient(2px 2px at 40px 70px, hsl(var(--accent) / 0.2), transparent),
+      radial-gradient(1px 1px at 90px 40px, hsl(var(--primary) / 0.1), transparent),
+      radial-gradient(1px 1px at 130px 80px, hsl(var(--accent) / 0.1), transparent);
+    background-size: 150px 100px;
+    animation: neural-drift 30s linear infinite;
+  }
+
+  /* Circuit Pattern */
+  .circuit-bg {
+    background-image: 
+      linear-gradient(90deg, hsl(var(--primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(180deg, hsl(var(--primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(45deg, hsl(var(--accent) / 0.05) 1px, transparent 1px);
+    background-size: 50px 50px, 50px 50px, 25px 25px;
+    animation: circuit-flow 15s ease-in-out infinite;
+  }
+
+  /* Modern floating animations */
+  @keyframes float-subtle {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-4px) rotate(1deg); }
+    66% { transform: translateY(2px) rotate(-1deg); }
+  }
+  
+  @keyframes float-dynamic {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    25% { transform: translate(-3px, -6px) scale(1.02); }
+    50% { transform: translate(6px, -2px) scale(0.98); }
+    75% { transform: translate(-2px, 4px) scale(1.01); }
+  }
+
+  @keyframes glow-pulse {
+    from { filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.8)); }
+    to { filter: drop-shadow(0 0 20px hsl(var(--primary) / 0.4)); }
+  }
+
+  /* AI Background Animations */
+  @keyframes ai-pulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.2; }
+  }
+
+  @keyframes ai-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes neural-drift {
+    0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+    100% { background-position: 150px 100px, -150px -100px, 75px 50px, -75px -50px; }
+  }
+
+  @keyframes circuit-flow {
+    0%, 100% { opacity: 0.3; }
+    25% { opacity: 0.6; }
+    50% { opacity: 0.3; }
+    75% { opacity: 0.6; }
+  }
+
+  @keyframes drift {
+    0% { transform: translate(0px, 0px); }
+    100% { transform: translate(-100px, -100px); }
+  }
+
+  /* Glowing orb animations */
+  @keyframes orb-float {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    25% { transform: translate(10px, -15px) scale(1.1); }
+    50% { transform: translate(-8px, -5px) scale(0.9); }
+    75% { transform: translate(15px, 10px) scale(1.05); }
+  }
+
+  /* Water Animation keyframes */
+  @keyframes water-ripple {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes water-expand {
+    0% { 
+      transform: scale(0); 
+      opacity: 0.8; 
+    }
+    100% { 
+      transform: scale(3); 
+      opacity: 0; 
+    }
+  }
+
+  @keyframes water-fade {
+    0% { 
+      opacity: 0.3; 
+      transform: scale(0.8); 
+    }
+    100% { 
+      opacity: 0; 
+      transform: scale(2); 
+    }
+  }
+  
+  .animate-float-subtle {
+    animation: float-subtle 6s ease-in-out infinite;
+  }
+  
+  .animate-float-dynamic {
+    animation: float-dynamic 8s ease-in-out infinite;
+  }
+
+/* AI Animation Classes */
+  .animate-ai-pulse {
+    animation: ai-pulse 4s ease-in-out infinite;
+  }
+
+  .animate-neural-drift {
+    animation: neural-drift 30s linear infinite;
+  }
+
+  .animate-circuit-flow {
+    animation: circuit-flow 15s ease-in-out infinite;
+  }
+
+  .animate-orb-float {
+    animation: orb-float 10s ease-in-out infinite;
+  }
+
+  /* Water Animation Classes */
+  .animate-water-ripple {
+    animation: water-ripple 1.5s ease-out;
+  }
+
+  .animate-water-expand {
+    animation: water-expand 1.5s ease-out;
+  }
+
+  .animate-water-expand-delayed {
+    animation: water-expand 1.5s ease-out 0.2s;
+  }
+
+  .animate-water-fade {
+    animation: water-fade 1.5s ease-out;
+  }
+
+  /* AI Glow Effects */
+  .shadow-glow-ai {
+    box-shadow: var(--glow-ai);
+  }
+
+  .bg-gradient-ai {
+    background: var(--gradient-ai);
+  }
+
+  /* Modern Interactive Effects */
+  .ai-card-hover {
+    transition: var(--transition-glow);
+  }
+
+  .ai-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glow-ai);
+    background: var(--gradient-glow);
+  }
+
+  /* Modern button hover effects */
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elegant);
+  }
+
+  /* Smooth backdrop blur effects */
+  .backdrop-modern {
+    backdrop-filter: blur(12px) saturate(180%);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Enhanced gradient backgrounds */
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .bg-gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+  
+  .bg-gradient-glow {
+    background: var(--gradient-glow);
+  }
+
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+  
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-glow-cyan {
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .shadow-glow-purple {
+    box-shadow: var(--glow-purple);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  /* Professional typography */
+  .font-heading {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+}
